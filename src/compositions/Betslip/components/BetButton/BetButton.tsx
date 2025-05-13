@@ -1,6 +1,11 @@
 import React, { useRef } from 'react'
 import cx from 'classnames'
-import { useBaseBetslip, useChain, useDetailedBetslip, useBet } from '@azuro-org/sdk'
+import {
+  useBaseBetslip,
+  useChain,
+  useDetailedBetslip,
+  useBet,
+} from '@azuro-org/sdk'
 import { type Address } from 'viem'
 import { Message } from '@locmod/intl'
 import { useAccount } from '@azuro-org/sdk-social-aa-connector'
@@ -15,17 +20,25 @@ import messages from './messages'
 
 
 type BetButtonProps = {
-  isEnoughBalance: boolean
-  isBalanceFetching: boolean
-}
+  isEnoughBalance: boolean;
+  isBalanceFetching: boolean;
+};
 
-const BetButton: React.FC<BetButtonProps> = ({ isEnoughBalance, isBalanceFetching }) => {
+const BetButton: React.FC<BetButtonProps> = ({
+  isEnoughBalance,
+  isBalanceFetching,
+}) => {
   const { address } = useAccount()
   const { betToken } = useChain()
   const { items, clear } = useBaseBetslip()
   const {
-    betAmount, odds, totalOdds,
-    isBetAllowed, isOddsFetching, isStatesFetching, isMaxBetFetching,
+    betAmount,
+    odds,
+    totalOdds,
+    isBetAllowed,
+    isOddsFetching,
+    isStatesFetching,
+    isMaxBetFetching,
   } = useDetailedBetslip()
 
   const totalOddsRef = useRef(totalOdds)
@@ -34,7 +47,10 @@ const BetButton: React.FC<BetButtonProps> = ({ isEnoughBalance, isBalanceFetchin
     totalOddsRef.current = totalOdds
   }
 
-  const slippage = +(localStorage.getItem(constants.localStorageKeys.slippage) as string || constants.defaultSlippage)
+  const slippage = +(
+    (localStorage.getItem(constants.localStorageKeys.slippage) as string) ||
+		constants.defaultSlippage
+  )
 
   const {
     submit,
@@ -70,33 +86,37 @@ const BetButton: React.FC<BetButtonProps> = ({ isEnoughBalance, isBalanceFetchin
   const isPending = approveTx.isPending || betTx.isPending
   const isProcessing = approveTx.isProcessing || betTx.isProcessing
 
-  const isLoading = (
-    isOddsFetching
-    || isMaxBetFetching
-    || isBalanceFetching
-    || isStatesFetching
-    || isAllowanceLoading
-    || isPending
-    || isProcessing
-    || isRelayerFeeLoading
-  )
+  const isLoading =
+		isOddsFetching ||
+		isMaxBetFetching ||
+		isBalanceFetching ||
+		isStatesFetching ||
+		isAllowanceLoading ||
+		isPending ||
+		isProcessing ||
+		isRelayerFeeLoading
 
-  const isDisabled = (
-    isLoading
-    || !address
-    || !isBetAllowed
-    || (!isEnoughBalance && !isApproveRequired)
-    || !+betAmount
-  )
+  const isDisabled =
+		isLoading ||
+		!address ||
+		!isBetAllowed ||
+		(!isEnoughBalance && !isApproveRequired) ||
+		!+betAmount
 
-  const rootClassName = cx('flex items-center justify-between py-1 pr-1 border rounded-md w-full', {
-    'bg-bg-l1 border-grey-10 cursor-not-allowed': isDisabled,
-    'bg-brand-50 text-grey-90 border-white/20': !isDisabled,
-  })
-  const possibleWinClassName = cx('text-caption-12 flex items-center p-2 rounded-sm flex-none select-none', {
-    'bg-grey-15 text-grey-20': isDisabled,
-    'bg-white/20 text-grey-90': !isDisabled,
-  })
+  const rootClassName = cx(
+    'flex items-center justify-between py-1 pr-1 border rounded-md w-full',
+    {
+      'bg-bg-l1 border-grey-10 cursor-not-allowed': isDisabled,
+      'bg-brand-50 text-grey-90 border-white/20': !isDisabled,
+    }
+  )
+  const possibleWinClassName = cx(
+    'text-caption-12 flex items-center p-2 rounded-sm flex-none select-none',
+    {
+      'bg-grey-15 text-grey-20': isDisabled,
+      'bg-white/20 text-grey-90': !isDisabled,
+    }
+  )
 
   return (
     <button className={rootClassName} onClick={submit} disabled={isDisabled}>
@@ -107,14 +127,21 @@ const BetButton: React.FC<BetButtonProps> = ({ isEnoughBalance, isBalanceFetchin
           ) : (
             <Message
               className="font-bold text-caption-14"
-              value={isApproveRequired ? buttonMessages.approve : buttonMessages.placeBet}
+              value={
+                isApproveRequired
+                  ? buttonMessages.approve
+                  : buttonMessages.placeBet
+              }
             />
           )
         }
       </div>
       <div className={possibleWinClassName}>
         <Message className="mr-1" value={messages.possibleWin} />
-        <div className="font-semibold">{toLocaleString(totalOddsRef.current * +betAmount, { digits: 2 })} {betToken.symbol}</div>
+        <div className="font-semibold">
+          {toLocaleString(totalOddsRef.current * +betAmount, { digits: 2 })}{' '}
+          {betToken.symbol}
+        </div>
       </div>
     </button>
   )

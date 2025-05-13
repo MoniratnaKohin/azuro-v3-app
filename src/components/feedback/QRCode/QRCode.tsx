@@ -2,11 +2,17 @@ import QRCodeUtil from 'qrcode'
 import React, { type ReactElement } from 'react'
 
 
-const generateMatrix = (value: string, errorCorrectionLevel: QRCodeUtil.QRCodeErrorCorrectionLevel) => {
-  const arr = Array.prototype.slice.call(QRCodeUtil.create(value, { errorCorrectionLevel }).modules.data, 0)
+const generateMatrix = (
+  value: string,
+  errorCorrectionLevel: QRCodeUtil.QRCodeErrorCorrectionLevel
+) => {
+  const arr = Array.prototype.slice.call(
+    QRCodeUtil.create(value, { errorCorrectionLevel }).modules.data,
+    0
+  )
   const sqrt = Math.sqrt(arr.length)
 
-  return arr.reduce((rows, key, index) => {
+  return arr.reduce<number[][]>((rows, key, index) => {
     if (index % sqrt === 0) {
       rows.push([ key ])
     }
@@ -19,19 +25,25 @@ const generateMatrix = (value: string, errorCorrectionLevel: QRCodeUtil.QRCodeEr
 }
 
 type Props = {
-  className?: string
-  ecl?: QRCodeUtil.QRCodeErrorCorrectionLevel
+  className?: string;
+  ecl?: QRCodeUtil.QRCodeErrorCorrectionLevel;
   // logoBackground?: string
   // logoUrl?: string | (() => Promise<string>)
   // logoMargin?: number
   // logoSize?: number
-  size?: number
-  padding?: number
-  uri: string
+  size?: number;
+  padding?: number;
+  uri: string;
 };
 
 export default function QRCode(props: Props) {
-  const { className, uri, ecl = 'M', size: sizeProp = 134, padding = 0 } = props
+  const {
+    className,
+    uri,
+    ecl = 'M',
+    size: sizeProp = 134,
+    padding = 0,
+  } = props
   const size = sizeProp - padding * 2
 
   const dots: ReactElement[] = []
@@ -72,16 +84,16 @@ export default function QRCode(props: Props) {
         if (
           !(
             (i < 7 && j < 7) ||
-            (i > matrix.length - 8 && j < 7) ||
-            (i < 7 && j > matrix.length - 8)
+						(i > matrix.length - 8 && j < 7) ||
+						(i < 7 && j > matrix.length - 8)
           )
         ) {
           if (
             !(
               i > matrixMiddleStart &&
-              i < matrixMiddleEnd &&
-              j > matrixMiddleStart &&
-              j < matrixMiddleEnd
+							i < matrixMiddleEnd &&
+							j > matrixMiddleStart &&
+							j < matrixMiddleEnd
             )
           ) {
             dots.push(
@@ -99,7 +111,6 @@ export default function QRCode(props: Props) {
     })
   })
 
-
   return (
     <div className={className}>
       <svg
@@ -109,11 +120,7 @@ export default function QRCode(props: Props) {
         style={{ all: 'revert', userSelect: 'none' }}
       >
         <title>QR Code</title>
-        <rect
-          fill="transparent"
-          height={size}
-          width={size}
-        />
+        <rect fill="transparent" height={size} width={size} />
         {dots}
       </svg>
     </div>

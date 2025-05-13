@@ -18,8 +18,12 @@ const WithdrawalForm: React.FC<{ className?: string }> = ({ className }) => {
 
   const { balance } = data || {}
 
-  const { value: addressValue, error: addressError } = useFieldState(form.fields.address)
-  const { value: amountValue, error: amountError } = useFieldState(form.fields.amount)
+  const { value: addressValue, error: addressError } = useFieldState(
+    form.fields.address
+  )
+  const { value: amountValue, error: amountError } = useFieldState(
+    form.fields.amount
+  )
 
   return (
     <FormComponent
@@ -30,7 +34,8 @@ const WithdrawalForm: React.FC<{ className?: string }> = ({ className }) => {
       <Message
         className="text-caption-13 mb-1"
         value={
-          { ...messages.address.label,
+          {
+            ...messages.address.label,
             values: {
               symbol: betToken.symbol,
               chain: appChain.name,
@@ -41,14 +46,23 @@ const WithdrawalForm: React.FC<{ className?: string }> = ({ className }) => {
       />
       <Input
         value={addressValue}
-        leftNode={<Icon className="size-4 mr-2" name={constants.chainIcons[appChain.id]} />}
+        leftNode={
+          (
+            <Icon
+              className="size-4 mr-2"
+              name={constants.chainIcons[appChain.id]}
+            />
+          )
+        }
         placeholder={messages.address.hint}
         regExp=""
         onChange={(value) => form.fields.address.set(value)}
       />
       {
         Boolean(addressError) && (
-          <div className="text-caption-13 text-accent-red mt-1">{addressError}</div>
+          <div className="text-caption-13 text-accent-red mt-1">
+            {addressError}
+          </div>
         )
       }
       <Message
@@ -58,7 +72,14 @@ const WithdrawalForm: React.FC<{ className?: string }> = ({ className }) => {
       />
       <Input
         value={amountValue}
-        leftNode={<Icon className="size-4 mr-2" name={constants.currencyIcons[appChain.id]} />}
+        leftNode={
+          (
+            <Icon
+              className="size-4 mr-2"
+              name={constants.currencyIcons[appChain.id]}
+            />
+          )
+        }
         placeholder="0.00"
         type="number"
         maxValue={maxValue}
@@ -67,13 +88,20 @@ const WithdrawalForm: React.FC<{ className?: string }> = ({ className }) => {
       />
       {
         Boolean(amountError) && (
-          <div className="text-caption-13 text-accent-red mt-1">{amountError}</div>
+          <div className="text-caption-13 text-accent-red mt-1">
+            {amountError}
+          </div>
         )
       }
       <Message
         className="mt-1.5 text-caption-13 text-grey-60"
         tag="p"
-        value={{ ...messages.available, values: { amount: balance || '...', symbol: betToken.symbol } }}
+        value={
+          {
+            ...messages.available,
+            values: { amount: balance || '...', symbol: betToken.symbol },
+          }
+        }
       />
       <Button
         className="mt-6 w-full"
@@ -84,7 +112,12 @@ const WithdrawalForm: React.FC<{ className?: string }> = ({ className }) => {
       />
       <Warning
         className="mt-3"
-        text={{ ...messages.warning, values: { symbol: betToken.symbol, chain: appChain.name } }}
+        text={
+          {
+            ...messages.warning,
+            values: { symbol: betToken.symbol, chain: appChain.name },
+          }
+        }
       />
     </FormComponent>
   )

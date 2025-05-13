@@ -1,10 +1,10 @@
 import { getSvgData } from './'
 
 
-const pendingRequests = {}
+const pendingRequests: Record<string, Promise<SvgProvider.SvgData>> = {}
 
 const request = (src: string): Promise<SvgProvider.SvgData> => {
-  if (pendingRequests[src]) {
+  if (Object.prototype.hasOwnProperty.call(pendingRequests, src)) {
     return pendingRequests[src]
   }
 
@@ -19,7 +19,7 @@ const request = (src: string): Promise<SvgProvider.SvgData> => {
         reject(`InlineSvg: Empty response: ${src}`)
       }
       else {
-        const svgData = getSvgData(xhr.response)
+        const svgData: any = getSvgData(xhr.response)
         resolve(svgData)
       }
 

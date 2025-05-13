@@ -3,7 +3,7 @@ const randomizeString = (length = 8) => {
   const numbers = '1234567890'
   const charset = letters + letters.toUpperCase() + numbers
 
-  const randomCharacter = (array) =>
+  const randomCharacter = (array: string): string =>
     array[Math.floor(Math.random() * array.length)]
 
   let R = ''
@@ -14,6 +14,5 @@ const randomizeString = (length = 8) => {
 
   return R
 }
-
 
 export default randomizeString
